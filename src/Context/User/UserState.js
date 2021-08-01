@@ -2,8 +2,9 @@ import React, { useReducer } from "react";
 import axios from "axios";
 import UserReducer from "./UserReducer";
 import UserContext from "./UserContext";
+import { GET_USERS, GET_PROFILE } from "../types";
 
-const UserState = () => {
+const UserState = (props) => {
   const initialState = {
     users: [],
     selectedUser: null,
@@ -13,12 +14,18 @@ const UserState = () => {
 
   const getUsers = async () => {
     const res = await axios.get("https://reqres.in/api/users");
-    console.log(res);
+    dispatch({
+      type: GET_USERS,
+      payload: res.data.data,
+    });
   };
 
   const getProfile = async (id) => {
     const res = await axios.get("https://reqres.in/api/users" + id);
-    console.log(res);
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data.data,
+    });
   };
 
   return (
@@ -30,7 +37,7 @@ const UserState = () => {
         getProfile,
       }}
     >
-      {}
+      {props.children}
     </UserContext.Provider>
   );
 };
